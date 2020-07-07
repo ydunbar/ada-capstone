@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+    <div>
+        <form method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend>Log in</legend>   
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            {{ form.csrf_token }}
+            <small class="text-muted">
+                <!-- update link -->
+                <a href="#">Forgot password?</a>
+            </small>
+        </form>
+    </div>
+    <div>
+        <small class="text-muted">
+            Need an account? <a href="{{ url_for('register') }}">Sign up</a>
+        </small>
+    </div>
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+    <h1>Profile</h1>
+    {% for post in posts %}
+        <h2>Subject: {{ post.subject }}</h2>
+        <p>Message: {{ post.message }}</p>
+    {% endfor %}
+{% endblock content %}

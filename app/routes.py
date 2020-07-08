@@ -1,8 +1,7 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-
-app = Flask(__name__)
-app.secret_key = '99db118651486b4a10f8e4d33644f799'
+from flask import render_template, url_for, flash, redirect
+from app import app
+from app.forms import RegistrationForm, LoginForm
+from app.models import User, Post
 
 # placeholder posts
 posts = [
@@ -54,7 +53,3 @@ def login():
         else:
             flash('Failed', 'danger')
     return render_template('login.html', form=form)
-
-# run without env vars
-if __name__ == '__main__':
-    app.run(debug=True)

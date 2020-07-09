@@ -31,9 +31,9 @@ def save_picture(form_picture):
     form_picture.save(picture_path)
     return picture_filename
 
-@app.route('/profile/<username>', methods=['GET', 'POST'])
-# @login_required
-def profile(username):
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile_settings():
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -47,15 +47,20 @@ def profile(username):
         current_user.email = form.email.data
         db.session.commit()
         flash('Account has been updated', 'success')
-        return redirect(url_for('profile'))
+        return redirect(url_for('profile_settings'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
     # placeholder posts
-    return render_template('profile.html', image_file=image_file, form=form)
+    return render_template('profile_settings.html', image_file=image_file, form=form)
 
-# add route for user profiles
+@app.route('/profile/<username>', methods=['GET', 'POST'])
+# @login_required
+def profile(username):
+    image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
+    # placeholder posts
+    return render_template('profile.html', image_file=image_file, username=username)
 
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required

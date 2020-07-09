@@ -5,4 +5,10 @@
 
 {% block content %}
     <h1>Browse</h1>
+    <!-- show posts -->
+    {% for user in users %}
+        <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
+        <!-- link to user show page -->
+        <h3>{{ user.username }}</h3>
+    {% endfor %}
 {% endblock content %}

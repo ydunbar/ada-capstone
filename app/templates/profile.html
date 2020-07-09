@@ -4,9 +4,54 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>{{ current_user.username }}</h1>
-    {% for post in posts %}
-        <h2>Subject: {{ post.subject }}</h2>
-        <p>Message: {{ post.message }}</p>
-    {% endfor %}
+    <div class="content-section">
+        <!-- image_file not working (externally hosted image works) -->
+        <img class="rounded-circle" src="{{ image_file }}">
+        <h2>{{ current_user.username }}</h2>
+        <p class="text-secondary">{{ current_user.email }}</p>
+
+        <!-- update account info -->
+        <div>
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend>Update account details</legend>
+                    <div class="form-group">
+                        {{ form.username.label(class="form-control-label") }}
+                        
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control") }}
+                        {% endif %}
+                        
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label(class="form-control-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <!-- image file field -->
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+                {{ form.csrf_token }}
+            </form>
+        </div>
+    </div>
 {% endblock content %}

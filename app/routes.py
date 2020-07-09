@@ -31,9 +31,9 @@ def save_picture(form_picture):
     form_picture.save(picture_path)
     return picture_filename
 
-@app.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
+@app.route('/profile/<username>', methods=['GET', 'POST'])
+# @login_required
+def profile(username):
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:

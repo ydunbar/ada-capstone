@@ -55,12 +55,17 @@ def profile_settings():
     # placeholder posts
     return render_template('profile_settings.html', image_file=image_file, form=form)
 
+# find user by username: User.query.filter_by(username=username) , if no user return 404
+
 @app.route('/profile/<username>', methods=['GET', 'POST'])
-# @login_required
 def profile(username):
-    image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
-    # placeholder posts
-    return render_template('profile.html', image_file=image_file, username=username)
+    user = User.query.filter_by(username=username).first()
+    if user:
+        image_file = url_for('static', filename='profile_pictures/' + 'user.image')
+        return render_template('profile.html', image_file=image_file, user=user)
+    else:
+        flash('User does not exist', 'danger')
+        return redirect(url_for('home'))
 
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required

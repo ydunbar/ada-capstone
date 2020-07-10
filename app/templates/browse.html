@@ -9,6 +9,7 @@
     {% for user in users %}
         <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
         <!-- link to user show page -->
-        <h3>{{ user.username }}</h3>
+        <a class="nav-link" href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a>
+        
     {% endfor %}
 {% endblock content %}

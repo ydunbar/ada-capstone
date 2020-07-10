@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     image = db.Column(db.String(), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
-    # messages
+    # recieved_posts
     # type; mentor/mentee
     # skills; full-stack, front-end, back-end
 

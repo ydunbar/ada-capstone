@@ -52,10 +52,7 @@ def profile_settings():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
-    # placeholder posts
     return render_template('profile_settings.html', image_file=image_file, form=form)
-
-# find user by username: User.query.filter_by(username=username) , if no user return 404
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):

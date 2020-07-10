@@ -4,12 +4,12 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>Browse</h1>
+    <h1>Users</h1>
     <!-- show posts -->
     {% for user in users %}
         <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
         <!-- link to user show page -->
-        <a class="nav-link" href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a>
+        <a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a>
         
     {% endfor %}
 {% endblock content %}

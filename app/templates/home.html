@@ -4,10 +4,14 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>Home</h1>
+    <h1>Messages</h1>
     <!-- show posts -->
     {% for post in posts %}
         <h3>{{ post.title }}</h3>
+        <!-- separate into message view page; link from title -->
         <p>{{ post.content }}</p>
+        <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+        <!-- reply to message button; add recipient -->
+        <a href="{{ url_for('new_post') }}">Reply to message</a>
     {% endfor %}
 {% endblock content %}

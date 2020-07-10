@@ -9,8 +9,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route('/')
 @app.route('/home', methods=['GET'])
 def home():
-    # change to posts addressed to user; filter by recipient=current_user
-    posts = Post.query.all()
+    # only if logged in:
+    if current_user.is_authenticated:
+        posts = Post.query.filter_by(recipient_id=current_user.id)
+    else:
+        posts = []
+    # posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
 @app.route('/matches', methods=['GET'])
@@ -64,12 +68,13 @@ def profile(username):
         flash('User does not exist', 'danger')
         return redirect(url_for('home'))
 
-@app.route('/post/new', methods=['GET', 'POST'])
+@app.route('/post/<username>', methods=['GET', 'POST'])
 @login_required
-def new_post():
+def new_post(username):
+    user = User.query.filter_by(username=username).first()
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user) # add recipient; last visited user, or change post message route
+        post = Post(title=form.title.data, content=form.content.data, author_id=current_user.id, recipient_id=user.id)
         db.session.add(post)
         db.session.commit()
         flash('Post has been created', 'success')

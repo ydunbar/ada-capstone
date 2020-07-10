@@ -12,7 +12,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(), unique=True, nullable=False)
     image = db.Column(db.String(), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    # posts = db.relationship('Post', backref='author', lazy=True)
+
     # recieved_posts = db.relationship('Post', backref='recipient', lazy=True) 
     # sqlalchemy.exc.AmbiguousForeignKeysError: Can't determine join between 'user' and 'post'; tables have more than one foreign key constraint relationship between them. Please specify the 'onclause' of this join explicitly.
     # sqlalchemy.exc.AmbiguousForeignKeysError: Could not determine join condition between parent/child tables on relationship User.posts - there are multiple foreign key paths linking the tables.  Specify the 'foreign_keys' argument, providing a list of those columns which should be counted as containing a foreign key reference to the parent table.
@@ -32,7 +33,11 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    author = db.relationship('User', foreign_keys='Post.author_id')
+
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient = db.relationship('User', foreign_keys='Post.recipient_id')
 
 
     def __repr__(self):

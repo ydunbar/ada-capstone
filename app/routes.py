@@ -9,7 +9,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route('/')
 @app.route('/home', methods=['GET'])
 def home():
-    # change to posts addressed to user
+    # change to posts addressed to user; filter by recipient=current_user
     posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
@@ -69,7 +69,7 @@ def profile(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user) # add recipient; last visited user, or change post message route
         db.session.add(post)
         db.session.commit()
         flash('Post has been created', 'success')

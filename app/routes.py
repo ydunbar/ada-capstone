@@ -11,7 +11,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 def home():
     # only if logged in:
     if current_user.is_authenticated:
-        posts = Post.query.filter_by(recipient_id=current_user.id)
+        posts = Post.query.filter_by(recipient=current_user)
     else:
         posts = []
     # posts = Post.query.all()
@@ -74,7 +74,7 @@ def new_post(username):
     user = User.query.filter_by(username=username).first()
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author_id=current_user.id, recipient_id=user.id)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, recipient=user)
         db.session.add(post)
         db.session.commit()
         flash('Post has been created', 'success')

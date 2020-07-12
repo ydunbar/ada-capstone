@@ -3,7 +3,7 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm
-from app.models import User, Post
+from app.models import User, Post, Role
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
@@ -14,7 +14,6 @@ def home():
         posts = Post.query.filter_by(recipient=current_user)
     else:
         posts = []
-    # posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
 @app.route('/matches', methods=['GET'])
@@ -49,12 +48,19 @@ def profile_settings():
                 os.remove(os.path.join(app.root_path, 'static/profile_pics', old_pic))
         current_user.username = form.username.data
         current_user.email = form.email.data
+
+        roles = form.role.data
+        for role in roles:
+            role_object = Role.query.filter_by(name = role).first()
+            # role_object.users.append(current_user) # seems to work in DB but has bug from site; role only gets users from first user to select role
+            current_user.roles.append(role_object) # works in site
         db.session.commit()
         flash('Account has been updated', 'success')
         return redirect(url_for('profile_settings'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        # form.role.data = current_user.roles; how to highlight in form?
     image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
     return render_template('profile_settings.html', image_file=image_file, form=form)
 

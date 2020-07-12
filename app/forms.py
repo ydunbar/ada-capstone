@@ -42,7 +42,7 @@ class UpdateProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(message="Username required")])
     email = StringField('Email', validators=[DataRequired(message="email required")])  
     picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png'])])
-    role = SelectMultipleField(u'I am looking to:', choices=role_choices, validate_choice=False, widget=widgets.Select(multiple=True))
+    role = SelectMultipleField(u'I am looking to:', choices=role_choices, validate_choice=False) # , widget=widgets.Select(multiple=True) ; doesn't work?
     submit = SubmitField('Update')
 
     def validate_username(self, username):

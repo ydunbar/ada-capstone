@@ -9,7 +9,8 @@
         <img class="rounded-circle" src="{{ image_file }}">
         <h2>{{ user.username }}</h2>
         {% for role in user.roles %}
-            <span>{{ role.name }}</span>
+            <span>{{ role.name }}</span> 
+            <!-- add comma after multiple roles? -->
         {% endfor %}
         <p class="text-secondary">{{ user.email }}</p>
         <a href="{{ url_for('new_post', username = user.username) }}">Send message</a>

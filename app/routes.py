@@ -61,6 +61,8 @@ def profile_settings():
         form.username.data = current_user.username
         form.email.data = current_user.email
         # form.role.data = current_user.roles; how to highlight in form?
+        # try: form.role.process_data(current_user.roles)
+        # OR: after; form.process()
     image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
     return render_template('profile_settings.html', image_file=image_file, form=form)
 

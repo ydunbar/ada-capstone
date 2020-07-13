@@ -53,8 +53,22 @@ def profile_settings():
         current_user.email = form.email.data
         
         # update role from checkboxes
+        # TODO: delete roles
         if form.mentor.data == True:
             current_user.roles.append(Role.query.filter_by(name = 'mentor').first())
+        else:
+            # with session.no_autoflush: 
+            # session not defined
+            current_user.roles.remove(current_user.roles.filter_by(name = 'mentor').first()) # works in db
+            # sqlalchemy.exc.OperationalError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+            # (sqlite3.OperationalError) database is locked
+            # [SQL: DELETE FROM "role-user" WHERE "role-user".user_id = ? AND "role-user".role_id = ?]
+            # [parameters: (2, 1)]
+            # (Background on this error at: http://sqlalche.me/e/13/e3q8)
+
+            # with session created in __init__py: sqlalchemy.orm.exc.StaleDataError: DELETE statement on table 'role-user' expected to delete 1 row(s); Only 5 were matched.
+            
+            # Role.query.filter_by(name = 'mentor').first().users.remove(current_user) # sqlalchemy.orm.exc.ObjectDereferencedError: Can't emit change event for attribute 'Role.users' - parent object of type <Role> has been garbage collected.
         if form.mentee.data == True:
             current_user.roles.append(Role.query.filter_by(name = 'mentee').first())
         if form.collaborator.data == True:
@@ -66,7 +80,7 @@ def profile_settings():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-        
+
         # show checked roles
         form.mentor.data = current_user.roles.filter_by(name='mentor').first()
         form.mentee.data = current_user.roles.filter_by(name='mentee').first()

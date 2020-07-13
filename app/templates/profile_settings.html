@@ -49,9 +49,18 @@
                         {% endif %}
                     </div>
 
-                    <div class="form-group">
-                        {{ form.role.label(class="form-control-label") }}
-                        {{ form.role(class="form-control", rows=3, multiple=True) }}
+                    <p>I am a:</p>
+                    <div class="form-check">
+                        {{ form.mentor(class="form-check-input") }}
+                        {{ form.mentor.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.mentee(class="form-check-input") }}
+                        {{ form.mentee.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.collaborator(class="form-check-input") }}
+                        {{ form.collaborator.label(class="form-check-label") }}
                     </div>
                     
                 </fieldset>

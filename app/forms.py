@@ -5,13 +5,12 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 from app.models import User, Role
 
-def role_query():
-    role_choices = []
-    roles = Role.query.all()
-    for role in roles:
-        role_tuple = (role.name, role.description) # works with lazy=dynamic in User.roles
-        role_choices.append(role_tuple)
-    return role_choices
+# def role_query():
+#     role_choices = []
+#     roles = Role.query.all()
+#     for role in roles:
+#         role_choices.append(role.description)
+#     return role_choices
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(message="Username required")])
@@ -37,12 +36,15 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log in')
 
 class UpdateProfileForm(FlaskForm):
-    role_choices = role_query()
-    
+    # role_choices = role_query()
     username = StringField('Username', validators=[DataRequired(message="Username required")])
     email = StringField('Email', validators=[DataRequired(message="email required")])  
     picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png'])])
-    role = SelectMultipleField(u'I am looking to:', choices=role_choices, validate_choice=False) # , widget=widgets.Select(multiple=True) ; doesn't work?
+
+    mentor = BooleanField('mentor')
+    mentee = BooleanField('mentee')
+    collaborator = BooleanField('collaborator')
+    
     submit = SubmitField('Update')
 
     def validate_username(self, username):

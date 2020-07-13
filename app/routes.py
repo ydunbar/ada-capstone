@@ -34,6 +34,9 @@ def save_picture(form_picture):
     form_picture.save(picture_path)
     return picture_filename
 
+def get_role(role_name):
+    return Role.query.filter_by(name = role_name).first()
+
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile_settings():
@@ -48,21 +51,27 @@ def profile_settings():
                 os.remove(os.path.join(app.root_path, 'static/profile_pics', old_pic))
         current_user.username = form.username.data
         current_user.email = form.email.data
+        
+        # update role from checkboxes
+        if form.mentor.data == True:
+            current_user.roles.append(Role.query.filter_by(name = 'mentor').first())
+        if form.mentee.data == True:
+            current_user.roles.append(Role.query.filter_by(name = 'mentee').first())
+        if form.collaborator.data == True:
+            current_user.roles.append(Role.query.filter_by(name = 'collaborator').first())
 
-        roles = form.role.data
-        for role in roles:
-            role_object = Role.query.filter_by(name = role).first()
-            # role_object.users.append(current_user) # seems to work in DB but has bug from site; role only gets users from first user to select role
-            current_user.roles.append(role_object) # works in site
         db.session.commit()
         flash('Account has been updated', 'success')
         return redirect(url_for('profile_settings'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-        # form.role.data = current_user.roles; how to highlight in form?
-        # try: form.role.process_data(current_user.roles)
-        # OR: after; form.process()
+        
+        # show checked roles
+        form.mentor.data = current_user.roles.filter_by(name='mentor').first()
+        form.mentee.data = current_user.roles.filter_by(name='mentee').first()
+        form.collaborator.data = current_user.roles.filter_by(name='collaborator').first()
+       
     image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
     return render_template('profile_settings.html', image_file=image_file, form=form)
 

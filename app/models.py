@@ -6,11 +6,13 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-role_user = db.Table('role-user', 
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
+# many Roles to many Skills
+skill_role = db.Table('skill-role', 
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
+    db.Column('skill_id', db.Integer, db.ForeignKey('skill.id'))
 )
 
+# each User has many sent and recieved Posts, each User can have many Roles
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(), unique=True, nullable=False)
@@ -19,14 +21,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True, foreign_keys = 'Post.author_id')
     recieved_posts = db.relationship('Post', backref='recipient', lazy=True, foreign_keys = 'Post.recipient_id')
-    roles = db.relationship('Role', secondary=role_user, backref='users', lazy='dynamic')
-    # lazy='dynamic' => query object instead of collection, for querying related objects
-
-    # skills; full-stack, front-end, back-end
+    roles = db.relationship('Role', backref='user', lazy='dynamic', foreign_keys = 'Role.user_id')
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image}')"
 
+# each Post has one author and one recipient
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), unique=True, nullable=False)
@@ -38,21 +38,26 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
 
+# each Role can have many Skills; each role belongs to one User
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(), unique=True, nullable=False)
-    description = db.Column(db.String(), unique=True, nullable=False)
-    # users psuedo column
+    # description = db.Column(db.String(), unique=True, nullable=False)
+    skills = db.relationship('Skill', secondary=skill_role, backref='role', lazy='dynamic')
 
-    # seed data; refactor in loop? 
-    # Why does structure in terminal look different?
+# each Skill can belong to many Roles
+class Skill(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=False)
+    # role psuedo column
+
     @staticmethod
-    def generate_roles(): 
-        role1 = Role(name='mentor', description='provide mentorship')
-        role2 = Role(name='mentee', description='recieve mentorship')
-        role3 = Role(name='collaborator', description='collaborate on projects')
-        db.session.add(role1)
-        db.session.add(role2)
-        db.session.add(role3)
+    def generate_skills():
+        skill1 = Skill(name='full-stack')
+        skill2 = Skill(name='back-end')
+        skill3 = Skill(name='front-end')
+        db.session.add(skill1)
+        db.session.add(skill2)
+        db.session.add(skill3)
         db.session.commit()
-        # <Role (transient 4550179040)>

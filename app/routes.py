@@ -3,7 +3,7 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm
-from app.models import User, Post, Role
+from app.models import User, Post, Role, Skill
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
@@ -54,14 +54,60 @@ def profile_settings():
         
         # update role from checkboxes
         # TODO: delete roles
-        if form.mentor.data == True:
-            current_user.roles.append(Role.query.filter_by(name = 'mentor').first())
+        # TODO: refactor skill checkboxes into selectmultiple field/DRY
+        if form.mentor_fullstack.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentor', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
+            db.session.add(role)
+        if form.mentor_backend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentor', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
+            db.session.add(role)
+        if form.mentor_frontend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentor', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
+            db.session.add(role)
         # else:
         #     current_user.roles.remove(current_user.roles.filter_by(name = 'mentor').first()) # works in db
-        if form.mentee.data == True:
-            current_user.roles.append(Role.query.filter_by(name = 'mentee').first())
-        if form.collaborator.data == True:
-            current_user.roles.append(Role.query.filter_by(name = 'collaborator').first())
+        
+        if form.mentee_fullstack.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentee', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
+            db.session.add(role)
+        if form.mentee_backend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentee', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
+            db.session.add(role)
+        if form.mentee_frontend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='mentee', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
+            db.session.add(role) 
+        
+        if form.collaborator_fullstack.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='collaborator', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
+            db.session.add(role)
+        if form.collaborator_backend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='collaborator', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
+            db.session.add(role)
+        if form.collaborator_frontend.data:
+            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            role = Role(name='collaborator', user_id=current_user.id)
+            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
+            db.session.add(role)  
+            
+            # current_user.roles.append(Role.query.filter_by(name = 'collaborator').first())
+
+        # current_user.roles.append(role)
 
         db.session.commit()
         flash('Account has been updated', 'success')

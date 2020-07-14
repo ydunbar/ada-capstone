@@ -42,7 +42,7 @@ class Post(db.Model):
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String(), unique=True, nullable=False)
+    name = db.Column(db.String(), nullable=False)
     # description = db.Column(db.String(), unique=True, nullable=False)
     skills = db.relationship('Skill', secondary=skill_role, backref='role', lazy='dynamic')
 

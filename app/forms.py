@@ -42,8 +42,19 @@ class UpdateProfileForm(FlaskForm):
     picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png'])])
 
     mentor = BooleanField('mentor')
+    mentor_fullstack = BooleanField('full-stack')
+    mentor_backend = BooleanField('back-end')
+    mentor_frontend = BooleanField('front-end')
+
     mentee = BooleanField('mentee')
+    mentee_fullstack = BooleanField('full-stack')
+    mentee_backend = BooleanField('back-end')
+    mentee_frontend = BooleanField('front-end')
+
     collaborator = BooleanField('collaborator')
+    collaborator_fullstack = BooleanField('full-stack')
+    collaborator_backend = BooleanField('back-end')
+    collaborator_frontend = BooleanField('front-end')
     
     submit = SubmitField('Update')
 

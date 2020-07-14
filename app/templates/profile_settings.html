@@ -50,17 +50,46 @@
                     </div>
 
                     <p>I am a:</p>
+                    <div>mentor:</div>
                     <div class="form-check">
-                        {{ form.mentor(class="form-check-input") }}
-                        {{ form.mentor.label(class="form-check-label") }}
+                        {{ form.mentor_fullstack(class="form-check-input") }}
+                        {{ form.mentor_fullstack.label(class="form-check-label") }}
                     </div>
                     <div class="form-check">
-                        {{ form.mentee(class="form-check-input") }}
-                        {{ form.mentee.label(class="form-check-label") }}
+                        {{ form.mentor_backend(class="form-check-input") }}
+                        {{ form.mentor_backend.label(class="form-check-label") }}
                     </div>
                     <div class="form-check">
-                        {{ form.collaborator(class="form-check-input") }}
-                        {{ form.collaborator.label(class="form-check-label") }}
+                        {{ form.mentor_frontend(class="form-check-input") }}
+                        {{ form.mentor_frontend.label(class="form-check-label") }}
+                    </div>
+                    <br>
+                    <div>mentee:</div>
+                    <div class="form-check">
+                        {{ form.mentee_fullstack(class="form-check-input") }}
+                        {{ form.mentee_fullstack.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.mentee_backend(class="form-check-input") }}
+                        {{ form.mentee_backend.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.mentee_frontend(class="form-check-input") }}
+                        {{ form.mentee_frontend.label(class="form-check-label") }}
+                    </div>
+                    <br>
+                    <div>collaborator:</div>
+                    <div class="form-check">
+                        {{ form.collaborator_fullstack(class="form-check-input") }}
+                        {{ form.collaborator_fullstack.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.collaborator_backend(class="form-check-input") }}
+                        {{ form.collaborator_backend.label(class="form-check-label") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.collaborator_frontend(class="form-check-input") }}
+                        {{ form.collaborator_frontend.label(class="form-check-label") }}
                     </div>
                     
                 </fieldset>

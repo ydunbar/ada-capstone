@@ -4,10 +4,21 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>Search for:</h1>
     <!-- filter form; select multiple dynamic-->
+    <form method="POST">
+        <fieldset class="form-group">
+            <legend>Search For:</legend>   
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.role }}
+                    {{ form.skill }}
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>       
+        </fieldset>
+    </form>
 
-    <h2>All Users</h2>
+    <!-- if no search, show all users -->
+    <!-- <h2>All Users</h2> -->
     <!-- show posts -->
     {% for user in users %}
         <!-- <img class="rounded-circle" src="{{ image_file }}"> -->

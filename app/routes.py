@@ -2,7 +2,7 @@ import os
 import secrets
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm
+from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm, SearchForm
 from app.models import User, Post, Role, Skill
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -21,10 +21,30 @@ def home():
 def matches():
     return render_template('matches.html')
 
-@app.route('/browse', methods=['GET'])
+# with all users and search; should be one route or two (with search template extending browse?)?
+@app.route('/browse', methods=['GET', 'POST'])
 def browse():
-    users = User.query.all()
-    return render_template('browse.html', users=users)
+    form = SearchForm()
+    # refactor to create tuples from each skill.name
+    form.skill.choices = [('full-stack', 'full-stack'), ('back-end', 'back-end'), ('front-end', 'front-end')]
+    if request.method == 'POST':
+        # show users of role. TODO: make role and skill selection required. default to empty choice
+        all_users = User.query.all()
+        user_matches = []
+        role = form.role.data
+        skill = form.skill.data
+        for user in all_users:
+            # get user's matching roles
+            role_matches = user.roles.filter_by(name=role).all()
+            # search user's matching roles for matching skill
+            for role in role_matches:
+                skill_match = role.skills.filter_by(name=skill).first()
+                if skill_match:
+                    user_matches.append(user)
+        users = user_matches
+    elif request.method == 'GET':
+        users = User.query.all()
+    return render_template('browse.html', users=users, form=form)
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -57,7 +77,7 @@ def profile_settings():
         # TODO: refactor skill checkboxes into selectmultiple field/DRY
         # TODO: make form remember checked boxes
         if form.mentor_fullstack.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
+            # TODO: if user doesn't have role with that name (get_role), create new role; else append skill to exisiting role
             role = Role(name='mentor', user_id=current_user.id)
             role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
             db.session.add(role)

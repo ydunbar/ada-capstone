@@ -55,6 +55,7 @@ def profile_settings():
         # update role from checkboxes
         # TODO: delete roles
         # TODO: refactor skill checkboxes into selectmultiple field/DRY
+        # TODO: make form remember checked boxes
         if form.mentor_fullstack.data:
             # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
             role = Role(name='mentor', user_id=current_user.id)

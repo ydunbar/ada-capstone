@@ -13,13 +13,18 @@ def home():
     if current_user.is_authenticated:
         posts = Post.query.filter_by(recipient=current_user)
     else:
-        posts = []
+        posts = []        
     return render_template('home.html', posts=posts)
 
 @app.route('/matches', methods=['GET'])
 @login_required
-def matches():
-    return render_template('matches.html')
+def matches():   
+    # TODO: add logic for matches based on complementary roles
+    # if current_user.roles includes mentor
+        # if role includes full-stack
+            # get users with mentee:full stack role
+    matches = User.query.all()
+    return render_template('matches.html', matches=matches)
 
 # with all users and search; should be one route or two (with search template extending browse?)?
 @app.route('/browse', methods=['GET', 'POST'])
@@ -28,7 +33,7 @@ def browse():
     # refactor to create tuples from each skill.name
     form.skill.choices = [('full-stack', 'full-stack'), ('back-end', 'back-end'), ('front-end', 'front-end')]
     if request.method == 'POST':
-        # show users of role. TODO: make role and skill selection required. default to empty choice
+        # TODO: make role and skill selection required. default to empty choice
         all_users = User.query.all()
         user_matches = []
         role = form.role.data
@@ -54,8 +59,14 @@ def save_picture(form_picture):
     form_picture.save(picture_path)
     return picture_filename
 
-def get_role(role_name):
-    return Role.query.filter_by(name = role_name).first()
+def add_role(role_name, skill_name):
+    roles = current_user.roles
+    if roles.filter_by(name = role_name).first():
+        role = roles.filter_by(name = role_name).first()
+    else:
+        role = Role(name=role_name, user_id=current_user.id)
+    role.skills.append(Skill.query.filter_by(name = skill_name).first())
+    db.session.add(role)
 
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -77,66 +88,31 @@ def profile_settings():
         # TODO: refactor skill checkboxes into selectmultiple field/DRY
         # TODO: make form remember checked boxes
         if form.mentor_fullstack.data:
-            # TODO: if user doesn't have role with that name (get_role), create new role; else append skill to exisiting role
-            role = Role(name='mentor', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
-            db.session.add(role)
+            role = add_role('mentor', 'full-stack')
         if form.mentor_backend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='mentor', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
-            db.session.add(role)
+            role = add_role('mentor', 'back-end')
         if form.mentor_frontend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='mentor', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
-            db.session.add(role)
+            role = add_role('mentor', 'front-end')
         # else:
-        #     current_user.roles.remove(current_user.roles.filter_by(name = 'mentor').first()) # works in db
-        
+        #     current_user.roles.remove(current_user.roles.filter_by(name = 'mentor').first()) # works in db  
         if form.mentee_fullstack.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='mentee', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
-            db.session.add(role)
+           role = add_role('mentee', 'full-stack')
         if form.mentee_backend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='mentee', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
-            db.session.add(role)
+            role = add_role('mentee', 'back-end')
         if form.mentee_frontend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='mentee', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
-            db.session.add(role) 
-        
+            role = add_role('mentee', 'front-end')
         if form.collaborator_fullstack.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='collaborator', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'full-stack').first())
-            db.session.add(role)
+            role = add_role('collaborator', 'full-stack')
         if form.collaborator_backend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='collaborator', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'back-end').first())
-            db.session.add(role)
+            role = add_role('collaborator', 'back-end')
         if form.collaborator_frontend.data:
-            # TODO: if user doesn't have role with that name, create new role; else append skill to exisiting role
-            role = Role(name='collaborator', user_id=current_user.id)
-            role.skills.append(Skill.query.filter_by(name = 'front-end').first())
-            db.session.add(role)  
-            
-            # current_user.roles.append(Role.query.filter_by(name = 'collaborator').first())
-
-        # current_user.roles.append(role)
-
+            role = add_role('collaborator', 'front-end')
         db.session.commit()
         flash('Account has been updated', 'success')
         return redirect(url_for('profile_settings'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-
         # show checked roles
         form.mentor.data = current_user.roles.filter_by(name='mentor').first()
         form.mentee.data = current_user.roles.filter_by(name='mentee').first()

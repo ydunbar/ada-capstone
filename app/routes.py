@@ -16,14 +16,106 @@ def home():
         posts = []        
     return render_template('home.html', posts=posts)
 
+def get_mentees(skill):
+    all_users = User.query.all()
+    all_users.remove(current_user)
+    for user in all_users:
+        role_match = user.roles.filter_by(name='mentee').first()
+        if role_match:
+            skill_match = role_match.skills.filter_by(name=skill).first()
+            if skill_match:
+                return user
+
+def get_mentors(skill):
+    all_users = User.query.all()
+    all_users.remove(current_user)
+    for user in all_users:
+        role_match = user.roles.filter_by(name='mentor').first()
+        if role_match:
+            skill_match = role_match.skills.filter_by(name=skill).first()
+            if skill_match:
+                return user
+
+# def unique_match(matches, user):
+#     unique = True
+#     for match in matches:
+#         if match == user:
+#             unique = False
+#     return unique
+
 @app.route('/matches', methods=['GET'])
 @login_required
 def matches():   
     # TODO: add logic for matches based on complementary roles
-    # if current_user.roles includes mentor
-        # if role includes full-stack
-            # get users with mentee:full stack role
-    matches = User.query.all()
+    matches = []
+    roles = current_user.roles
+    for role in roles:
+        # if mentor
+        if role.name == 'mentor':
+            skills = role.skills
+            for skill in skills:
+                # if mentor: full-stack
+                if skill.name == 'full-stack':
+                    user = get_mentees('full-stack')
+                    # TODO: check if user is already in matches
+                    # if unique_match(matches, user): # not working,
+                    # might just do a user filter_by().first() on matches
+                    matches.append(user)
+                # if mentor: back-end
+                if skill.name == 'back-end':
+                    user = get_mentees('back-end')
+                    matches.append(user)
+                    # if unique_match(matches, user):
+                    matches.append(user)
+                # if mentor: front-end
+                if skill.name == 'front-end':
+                    user = get_mentees('front-end')
+                    matches.append(user)
+                    # if unique_match(matches, user):
+                    matches.append(user)
+        # if mentee
+        if role.name == 'mentee':
+            skills = role.skills
+            for skill in skills:
+                if skill.name == 'full-stack':
+                    user = get_mentors('full-stack')
+                    # TODO: check if user is already in matches
+                    # if unique_match(matches, user): # not working,
+                    # might just do a user filter_by().first() on matches
+                    matches.append(user)
+                # if mentor: back-end
+                if skill.name == 'back-end':
+                    user = get_mentors('back-end')
+                    matches.append(user)
+                    # if unique_match(matches, user):
+                    matches.append(user)
+                # if mentor: front-end
+                if skill.name == 'front-end':
+                    user = get_mentors('front-end')
+                    matches.append(user)
+                    # if unique_match(matches, user):
+                    matches.append(user)
+        # if collaborator
+        if role.name == 'mentee':
+            skills = role.skills
+            for skill in skills:
+                # if collaborator: full-stack; show all users
+                if skill.name == 'full-stack':
+                    all_users = User.query.all()
+                    all_users.remove(current_user)
+                    matches = all_users
+                # if collaborator: back-end; show all collaborators except back-end
+                if skill.name == 'back-end':
+                    all_users = User.query.all()
+                    all_users.remove(current_user)
+                    # TODO remove back-end
+                    matches = all_users
+                # if collaborator: front-end; show all collaborators except front-end
+                if skill.name == 'front-end':
+                    all_users = User.query.all()
+                    all_users.remove(current_user)
+                    # TODO remove front-end
+                    matches = all_users
     return render_template('matches.html', matches=matches)
 
 # with all users and search; should be one route or two (with search template extending browse?)?
@@ -40,10 +132,10 @@ def browse():
         skill = form.skill.data
         for user in all_users:
             # get user's matching roles
-            role_matches = user.roles.filter_by(name=role).all()
+            role_match = user.roles.filter_by(name=role).first()
             # search user's matching roles for matching skill
-            for role in role_matches:
-                skill_match = role.skills.filter_by(name=skill).first()
+            if role_match:
+                skill_match = role_match.skills.filter_by(name=skill).first()
                 if skill_match:
                     user_matches.append(user)
         users = user_matches

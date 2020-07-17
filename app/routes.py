@@ -3,8 +3,47 @@ import secrets
 from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm, SearchForm
-from app.models import User, Post, Role, Skill
+from app.models import User, Post, Role, Skill, OAuth
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_dance.contrib.github import make_github_blueprint, github
+from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
+from flask_dance.consumer import oauth_authorized
+from sqlalchemy.orm.exc import NoResultFound
+
+github_blueprint = make_github_blueprint(client_id='6cc74d23027b7eb558fb', client_secret='acf3576b55a2111a1ded517db1cc9218a2e94dc4')
+app.register_blueprint(github_blueprint, url_prefix='/github_login')
+github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
+
+@app.route('/github')
+def github_login():
+    # if not github.authorized:
+    return redirect(url_for('github.login'))
+
+    account_info = github.get('/user')
+    account_info_json = account_info.json()
+    # flash('Request failed', 'danger')
+
+# signal
+@oauth_authorized.connect_via(github_blueprint)
+def github_logged_in(blueprint, token):
+    account_info = blueprint.session.get('/user')
+
+    if account_info.ok:
+        account_info_json = account_info.json()
+        username = account_info_json['login']
+        email = account_info_json['email']
+        avatar_url = account_info_json['avatar_url']
+        # try this in match logic?
+        query = User.query.filter_by(username=username)
+        try:
+            user = query.one() # .one() should only be used if getting only one result is mandatory for the rest of the method
+        except NoResultFound:
+            user = User(username=username, email=email, image=avatar_url)
+            db.session.add(user)
+            db.session.commit()
+            flash('You are logged in as {}'.format(account_info_json['login']), 'success')
+        login_user(user)
+
 
 @app.route('/')
 @app.route('/home', methods=['GET'])

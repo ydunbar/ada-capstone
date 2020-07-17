@@ -1,6 +1,7 @@
 from datetime import datetime
 from app import db, login_manager
 from flask_login import UserMixin
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin, SQLAlchemyStorage
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -18,13 +19,18 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
     image = db.Column(db.String(), nullable=False, default='default.jpg')
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(60))
     posts = db.relationship('Post', backref='author', lazy=True, foreign_keys = 'Post.author_id')
     recieved_posts = db.relationship('Post', backref='recipient', lazy=True, foreign_keys = 'Post.recipient_id')
     roles = db.relationship('Role', backref='user', lazy='dynamic', foreign_keys = 'Role.user_id')
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image}')"
+
+# has id, provider, created_at, token, and user_id column
+class OAuth(OAuthConsumerMixin, db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    user = db.relationship(User)
 
 # each Post has one author and one recipient
 class Post(db.Model):

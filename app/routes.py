@@ -41,8 +41,8 @@ def github_logged_in(blueprint, token):
             user = User(username=username, email=email, image=avatar_url)
             db.session.add(user)
             db.session.commit()
-            flash('You are logged in as {}'.format(account_info_json['login']), 'success')
         login_user(user)
+        flash('You are logged in as {}'.format(account_info_json['login']), 'success')
 
 
 @app.route('/')

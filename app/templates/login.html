@@ -26,6 +26,7 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
             {{ form.csrf_token }}
+            <p>login with <a href="{{ url_for('github.login') }}">github</a></p>
             <small class="text-muted">
                 <!-- update link -->
                 <a href="#">Forgot password?</a>

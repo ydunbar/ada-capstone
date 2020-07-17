@@ -11,8 +11,8 @@ load_dotenv('.env')
 SECRET_KEY = environ.get('SECRET_KEY')
 
 # Tokens etc
-# GITHUB_CLIENT_ID = environ.get('GITHUB_CLIENT_ID')
-# GITHUB_CLIENT_SECRET = environ.get('GITHUB_CLIENT_SECRET')
+# GITHUB_OAUTH_CLIENT_ID = environ.get('GITHUB_OAUTH_CLIENT_ID')
+# GITHUB_OAUTH_CLIENT_SECRET = environ.get('GITHUB_OAUTH_CLIENT_SECRET')
 
 # Define the database
 SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'

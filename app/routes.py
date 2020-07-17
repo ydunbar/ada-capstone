@@ -15,9 +15,9 @@ from dotenv import load_dotenv
 from os import environ
 load_dotenv('.env')
 
-GITHUB_CLIENT_ID = environ.get('GITHUB_CLIENT_ID')
-GITHUB_CLIENT_SECRET = environ.get('GITHUB_CLIENT_SECRET')
-github_blueprint = make_github_blueprint(client_id=GITHUB_CLIENT_ID, client_secret=GITHUB_CLIENT_SECRET)
+GITHUB_OAUTH_CLIENT_ID = environ.get('GITHUB_OAUTH_CLIENT_ID')
+GITHUB_OAUTH_CLIENT_SECRET = environ.get('GITHUB_OAUTH_CLIENT_SECRET')
+github_blueprint = make_github_blueprint(client_id=GITHUB_OAUTH_CLIENT_ID, client_secret=GITHUB_OAUTH_CLIENT_SECRET)
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
 github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
 

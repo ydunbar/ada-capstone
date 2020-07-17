@@ -10,7 +10,14 @@ from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import oauth_authorized
 from sqlalchemy.orm.exc import NoResultFound
 
-github_blueprint = make_github_blueprint(client_id='6cc74d23027b7eb558fb', client_secret='acf3576b55a2111a1ded517db1cc9218a2e94dc4')
+# TODO: move dotenv references to config file
+from dotenv import load_dotenv
+from os import environ
+load_dotenv('.env')
+
+GITHUB_CLIENT_ID = environ.get('GITHUB_CLIENT_ID')
+GITHUB_CLIENT_SECRET = environ.get('GITHUB_CLIENT_SECRET')
+github_blueprint = make_github_blueprint(client_id=GITHUB_CLIENT_ID, client_secret=GITHUB_CLIENT_SECRET)
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
 github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
 

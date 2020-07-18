@@ -6,6 +6,7 @@ from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm, 
 from app.models import User, Post, Role, Skill, OAuth
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_dance.contrib.github import make_github_blueprint, github
+from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import oauth_authorized
 from sqlalchemy.orm.exc import NoResultFound
@@ -20,6 +21,12 @@ GITHUB_OAUTH_CLIENT_SECRET = environ.get('GITHUB_OAUTH_CLIENT_SECRET')
 github_blueprint = make_github_blueprint(client_id=GITHUB_OAUTH_CLIENT_ID, client_secret=GITHUB_OAUTH_CLIENT_SECRET)
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
 github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
+
+GOOGLE_OAUTH_CLIENT_ID = environ.get('GOOGLE_OAUTH_CLIENT_ID')
+GOOGLE_OAUTH_CLIENT_SECRET = environ.get('GOOGLE_OAUTH_CLIENT_SECRET')
+google_blueprint = make_google_blueprint(client_id=GOOGLE_OAUTH_CLIENT_ID, client_secret=GOOGLE_OAUTH_CLIENT_SECRET, scope=["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "openid"])
+app.register_blueprint(google_blueprint, url_prefix='/google_login')
+google_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
 
 @app.route('/github')
 def github_login():
@@ -51,6 +58,15 @@ def github_logged_in(blueprint, token):
         login_user(user)
         flash('You are logged in as {}'.format(account_info_json['login']), 'success')
 
+# @app.route('/google')
+# def google_login():
+#     # if not google.authorized:
+#     return redirect(url_for('google.login')) # OAuth 2 authorization error: Cannot set OAuth token without an associated user
+
+#     account_info = google.get('/userinfo') # or "/oauth2/v1/userinfo" ?
+#     if account_info.ok:
+#         account_info_json = account_info.json() # account_info returns name, email, picture
+#     # flash('Request failed', 'danger')
 
 @app.route('/')
 @app.route('/home', methods=['GET'])

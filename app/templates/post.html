@@ -17,8 +17,7 @@
     {% if post.author == current_user %}
         <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('update_post', id=post.id) }}">Edit</a>
         <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', id=post.id) }}">Delete</a>
-        <!-- <button type="button" class="btn btn-danger btn-sm m-1">Delete</button>  -->
-        <!-- data-toggle="modal" data-target="#deleteModal" -->
+        <!-- <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>  -->
     {% endif %}
 </div>
     

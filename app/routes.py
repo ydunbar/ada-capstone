@@ -1,3 +1,4 @@
+# followed resource for Flask-Dance Google OAuth: https://github.com/singingwolfboy/flask-dance-google-sqla/blob/master/app/oauth.py
 import os
 import secrets
 from flask import render_template, url_for, flash, redirect, request
@@ -20,7 +21,7 @@ GITHUB_OAUTH_CLIENT_ID = environ.get('GITHUB_OAUTH_CLIENT_ID')
 GITHUB_OAUTH_CLIENT_SECRET = environ.get('GITHUB_OAUTH_CLIENT_SECRET')
 github_blueprint = make_github_blueprint(client_id=GITHUB_OAUTH_CLIENT_ID, client_secret=GITHUB_OAUTH_CLIENT_SECRET)
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
-github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
+github_blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=current_user, user_required=False)
 
 GOOGLE_OAUTH_CLIENT_ID = environ.get('GOOGLE_OAUTH_CLIENT_ID')
 GOOGLE_OAUTH_CLIENT_SECRET = environ.get('GOOGLE_OAUTH_CLIENT_SECRET')
@@ -33,20 +34,20 @@ def github_login():
     # if not github.authorized:
     return redirect(url_for('github.login'))
 
-    account_info = github.get('/user')
-    account_info_json = account_info.json()
+    resp = github.get('/user')
+    info = resp.json()
     # flash('Request failed', 'danger')
 
 # signal
 @oauth_authorized.connect_via(github_blueprint)
 def github_logged_in(blueprint, token):
-    account_info = blueprint.session.get('/user')
+    resp = blueprint.session.get('/user')
 
-    if account_info.ok:
-        account_info_json = account_info.json()
-        username = account_info_json['login']
-        email = account_info_json['email']
-        avatar_url = account_info_json['avatar_url']
+    if resp.ok:
+        info = resp.json()
+        username = info['login']
+        email = info['email']
+        avatar_url = info['avatar_url']
         # try this in match logic?
         query = User.query.filter_by(username=username)
         try:
@@ -56,17 +57,45 @@ def github_logged_in(blueprint, token):
             db.session.add(user)
             db.session.commit()
         login_user(user)
-        flash('You are logged in as {}'.format(account_info_json['login']), 'success')
+        flash('You are logged in as {}'.format(info['login']), 'success')
 
-# @app.route('/google')
-# def google_login():
-#     # if not google.authorized:
-#     return redirect(url_for('google.login')) # OAuth 2 authorization error: Cannot set OAuth token without an associated user
+@app.route('/google')
+def google_login():
+    # if not google.authorized:
+    return redirect(url_for('google.login'))
 
-#     account_info = google.get('/userinfo') # or "/oauth2/v1/userinfo" ?
-#     if account_info.ok:
-#         account_info_json = account_info.json() # account_info returns name, email, picture
-#     # flash('Request failed', 'danger')
+    resp = google.get('/oauth2/v1/userinfo')
+    info = resp.json() # account_info returns name, email, picture
+    # flash('Request failed', 'danger')
+
+@oauth_authorized.connect_via(google_blueprint)
+def google_logged_in(blueprint, token):
+    resp = blueprint.session.get('/oauth2/v1/userinfo')
+    info = resp.json()
+    user_id = info['id']
+
+    # Find this OAuth token in the database, or create it
+    query = OAuth.query.filter_by(provider=google_blueprint.name, user_id=user_id)
+    try:
+        oauth = query.one()
+    except NoResultFound:
+        oauth = OAuth(provider=google_blueprint.name, user_id=user_id, token=token)
+
+    if oauth.user:
+        login_user(oauth.user)
+        flash('You are logged in as {}'.format(info['name']), 'success')
+
+    else:
+        user = User(username=info['name'], email=info['email'], image=info['picture'])
+        # Associate the new local user account with the OAuth token
+        oauth.user = user
+        db.session.add_all([user, oauth])
+        db.session.commit()
+        login_user(user)
+        flash('You are logged in as {}'.format(info['name']), 'success')
+
+    # Disable Flask-Dance's default behavior for saving the OAuth token
+    return False
 
 @app.route('/')
 @app.route('/home', methods=['GET'])

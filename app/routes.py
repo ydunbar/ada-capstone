@@ -1,7 +1,7 @@
 # followed resource for Flask-Dance Google OAuth: https://github.com/singingwolfboy/flask-dance-google-sqla/blob/master/app/oauth.py
 import os
 import secrets
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm, SearchForm
 from app.models import User, Post, Role, Skill, OAuth
@@ -61,8 +61,8 @@ def github_logged_in(blueprint, token):
 
 @app.route('/google')
 def google_login():
-    # if not google.authorized:
-    return redirect(url_for('google.login'))
+    if not google.authorized:
+        return redirect(url_for('google.login'))
 
     resp = google.get('/oauth2/v1/userinfo')
     info = resp.json() # account_info returns name, email, picture
@@ -330,7 +330,36 @@ def new_post(username):
 @app.route('/post/<int:id>')
 def post(id):
     post = Post.query.get_or_404(id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post.html', title=post.title, post=post, legend='New Post')
+
+@app.route('/post/<int:id>/update', methods=['GET', 'POST'])
+@login_required
+def update_post(id):
+    post = Post.query.get_or_404(id)
+    if post.author != current_user:
+        abort(403) # forbidden route
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your message has been updated', 'success')
+        return redirect(url_for('post', id=id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('create_post.html', form=form, legend='Update Post')
+
+@app.route('/post/<int:id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_post(id):
+    post = Post.query.get_or_404(id)
+    if post.author != current_user:
+        abort(403) # forbidden route
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your message has been deleted', 'success')
+    return redirect(url_for('home'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

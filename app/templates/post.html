@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+    <!-- and if current_user.is_authenticated -->
+        <!-- show post -->
+        
+        <h3>{{ post.title }}</h3>
+        <!-- separate into message view page; link from title -->
+        <p>{{ post.content }}</p>
+        <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+        <!-- reply to (author) message button -->
+        <a href="{{ url_for('new_post', username = post.author.username) }}">Reply to message</a>
+        
+    <!-- <h1>Forum</h1> -->
+{% endblock content %}

@@ -71,8 +71,8 @@ class UpdateProfileForm(FlaskForm):
                 raise ValidationError('Email already associated with an account')
 
 class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
+    title = StringField('Subject', validators=[DataRequired()])
+    content = TextAreaField('Message', validators=[DataRequired()])
     submit = SubmitField('Post')
 
 class SearchForm(FlaskForm):

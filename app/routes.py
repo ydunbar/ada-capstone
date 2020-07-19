@@ -323,9 +323,14 @@ def new_post(username):
         post = Post(title=form.title.data, content=form.content.data, author=current_user, recipient=user)
         db.session.add(post)
         db.session.commit()
-        flash('Post has been created', 'success')
+        flash('Message has been sent', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', form=form)
+
+@app.route('/post/<int:id>')
+def post(id):
+    post = Post.query.get_or_404(id)
+    return render_template('post.html', title=post.title, post=post)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

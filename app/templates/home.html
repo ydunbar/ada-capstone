@@ -7,15 +7,16 @@
     <div class="main">
         {% if posts %}
         <!-- and if current_user.is_authenticated -->
-            <h1>Messages</h1>
+            <h2>Messages</h2>
             <!-- show posts -->
             {% for post in posts %}
-                <a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a>
-                <!-- separate into message view page; link from title -->
-                <!-- <p>{{ post.content }}</p> -->
-                <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
-                <!-- reply to (author) message button -->
-                <!-- <a href="{{ url_for('new_post', username = post.author.username) }}">Reply to message</a> -->
+                <div class="card w-75">
+                    <div class="card-body">
+                        <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + post.author.image) }}">
+                        <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
+                        <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+                    </div>
+                </div>
             {% endfor %}
         {% endif %}
 

@@ -207,6 +207,7 @@ def matches():
                     all_users.remove(current_user)
                     # TODO remove front-end
                     matches = all_users
+    matches = list(set(matches))
     return render_template('matches.html', matches=matches)
 
 # with all users and search; should be one route or two (with search template extending browse?)?

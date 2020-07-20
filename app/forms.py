@@ -39,7 +39,7 @@ class UpdateProfileForm(FlaskForm):
     # role_choices = role_query()
     username = StringField('Username', validators=[DataRequired(message="Username required")])
     email = StringField('Email', validators=[DataRequired(message="email required")])  
-    picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'png'])])
+    picture = FileField('Update profile picture', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'bmp'])])
 
     mentor = BooleanField('mentor')
     mentor_fullstack = BooleanField('full-stack')

@@ -218,7 +218,8 @@ def browse():
     if request.method == 'POST':
         # TODO: make role and skill selection required. default to empty choice
         all_users = User.query.all()
-        all_users.remove(current_user)
+        if current_user.is_authenticated:
+            all_users.remove(current_user)
         user_matches = []
         role = form.role.data
         skill = form.skill.data
@@ -233,7 +234,8 @@ def browse():
         users = user_matches
     elif request.method == 'GET':
         users = User.query.all()
-        users.remove(current_user)
+        if current_user.is_authenticated:
+            users.remove(current_user)
     return render_template('browse.html', users=users, form=form)
 
 def save_picture(form_picture):

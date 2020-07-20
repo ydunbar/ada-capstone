@@ -4,19 +4,21 @@
 {% endblock head %}
 
 {% block content %}
-    {% if posts %}
-    <!-- and if current_user.is_authenticated -->
-        <h1>Messages</h1>
-        <!-- show posts -->
-        {% for post in posts %}
-            <a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a>
-            <!-- separate into message view page; link from title -->
-            <!-- <p>{{ post.content }}</p> -->
-            <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
-            <!-- reply to (author) message button -->
-            <!-- <a href="{{ url_for('new_post', username = post.author.username) }}">Reply to message</a> -->
-        {% endfor %}
-    {% endif %}
+    <div class="main">
+        {% if posts %}
+        <!-- and if current_user.is_authenticated -->
+            <h1>Messages</h1>
+            <!-- show posts -->
+            {% for post in posts %}
+                <a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a>
+                <!-- separate into message view page; link from title -->
+                <!-- <p>{{ post.content }}</p> -->
+                <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+                <!-- reply to (author) message button -->
+                <!-- <a href="{{ url_for('new_post', username = post.author.username) }}">Reply to message</a> -->
+            {% endfor %}
+        {% endif %}
 
-    <!-- <h1>Forum</h1> -->
+        <!-- <h1>Forum</h1> -->
+    </div>
 {% endblock content %}

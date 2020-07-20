@@ -4,11 +4,13 @@
 {% endblock head %}
 
 {% block content %}
-    <h1>Matches</h1>
-    {% for user in matches %}
-        <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
-        <!-- link to user show page -->
-        <p><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
-        
-    {% endfor %}
+    <div class="main">
+        <h1>Matches</h1>
+        {% for user in matches %}
+            <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
+            <!-- link to user show page -->
+            <p><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
+            
+        {% endfor %}
+    </div>
 {% endblock content %}

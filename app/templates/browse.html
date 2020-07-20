@@ -4,26 +4,29 @@
 {% endblock head %}
 
 {% block content %}
-    <!-- filter form; select multiple dynamic-->
-    <form method="POST">
-        <fieldset class="form-group">
-            <legend>Search For:</legend>   
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.role }}
-                    {{ form.skill }}
-                    {{ form.submit(class="btn btn-outline-info") }}
-                </div>       
-        </fieldset>
-    </form>
+    <div class="main">
+        <!-- filter form; select multiple dynamic-->
+        <form method="POST">
+            <fieldset class="form-group">
+                <legend>Search For:</legend>   
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.role }}
+                        {{ form.skill }}
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>       
+            </fieldset>
+        </form>
 
-    <!-- if no search, show all users -->
-    <!-- <h2>All Users</h2> -->
-    <!-- show posts -->
-    {% for user in users %}
-        <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
-        <!-- link to user show page -->
-        <p><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
-        
-    {% endfor %}
+        <!-- if no search, show all users -->
+        <!-- <h2>All Users</h2> -->
+        <!-- show posts -->
+        {% for user in users %}
+            <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
+            <!-- link to user show page -->
+            <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
+            <p><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
+            
+        {% endfor %}
+    </div>
 {% endblock content %}

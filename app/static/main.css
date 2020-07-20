@@ -1,0 +1,23 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+body a {
+    color: #01ABFF !important;
+}
+
+.main {
+    margin-top: 50px;
+}
+
+nav {
+    background: white;
+}
+
+nav .navbar-light div #navbarNav ul .navbar-nav li .nav-item a .nav-link {
+    color: #01ABFF;
+}
+
+nav .navbar-light div #navbarNav ul .navbar-nav li .nav-item a .nav-link a:hover { 
+    color: #00FF61 !important;
+}

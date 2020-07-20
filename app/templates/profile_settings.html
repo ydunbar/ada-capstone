@@ -4,101 +4,103 @@
 {% endblock head %}
 
 {% block content %}
-    <div class="content-section">
-        <!-- image_file not working (externally hosted image works) -->
-        <img class="rounded-circle" src="{{ image_file }}">
-        <h1>Profile Settings</h1>
-        <h2>{{ current_user.username }}</h2>
-        <!-- user = User.query find_by username -->
-        <p class="text-secondary">{{ current_user.email }}</p>
+    <div class="main">
+        <div class="content-section">
+            <!-- image_file not working (externally hosted image works) -->
+            <img class="rounded-circle" src="{{ image_file }}">
+            <h1>Profile Settings</h1>
+            <h2>{{ current_user.username }}</h2>
+            <!-- user = User.query find_by username -->
+            <p class="text-secondary">{{ current_user.email }}</p>
 
-        <!-- update account info -->
-        
-        <div>
-            <form method="POST" action="" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-                <fieldset class="form-group">
-                    <legend>Update account details</legend>
-                    <div class="form-group">
-                        {{ form.username.label(class="form-control-label") }}
-                        
-                        {% if form.username.errors %}
-                            {{ form.username(class="form-control is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.username.errors %}
-                                    <span>{{ error }}</span>
+            <!-- update account info -->
+            
+            <div>
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend>Update account details</legend>
+                        <div class="form-group">
+                            {{ form.username.label(class="form-control-label") }}
+                            
+                            {% if form.username.errors %}
+                                {{ form.username(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.username(class="form-control") }}
+                            {% endif %}
+                            
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label(class="form-control-label") }}
+                            {{ form.email(class="form-control") }}
+                        </div>
+                        <!-- image file field -->
+                        <div class="form-group">
+                            {{ form.picture.label() }}
+                            {{ form.picture(class="form-control-file") }}
+                            {% if form.picture.errors %}
+                                {% for error in form.picture.errors %}
+                                    <span class="text-danger">{{ error }}</span></br>
                                 {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.username(class="form-control") }}
-                        {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <p>I am a:</p>
+                        <div>mentor:</div>
+                        <div class="form-check">
+                            {{ form.mentor_fullstack(class="form-check-input") }}
+                            {{ form.mentor_fullstack.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.mentor_backend(class="form-check-input") }}
+                            {{ form.mentor_backend.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.mentor_frontend(class="form-check-input") }}
+                            {{ form.mentor_frontend.label(class="form-check-label") }}
+                        </div>
+                        <br>
+                        <div>mentee:</div>
+                        <div class="form-check">
+                            {{ form.mentee_fullstack(class="form-check-input") }}
+                            {{ form.mentee_fullstack.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.mentee_backend(class="form-check-input") }}
+                            {{ form.mentee_backend.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.mentee_frontend(class="form-check-input") }}
+                            {{ form.mentee_frontend.label(class="form-check-label") }}
+                        </div>
+                        <br>
+                        <div>collaborator:</div>
+                        <div class="form-check">
+                            {{ form.collaborator_fullstack(class="form-check-input") }}
+                            {{ form.collaborator_fullstack.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.collaborator_backend(class="form-check-input") }}
+                            {{ form.collaborator_backend.label(class="form-check-label") }}
+                        </div>
+                        <div class="form-check">
+                            {{ form.collaborator_frontend(class="form-check-input") }}
+                            {{ form.collaborator_frontend.label(class="form-check-label") }}
+                        </div>
                         
-                    </div>
+                    </fieldset>
                     <div class="form-group">
-                        {{ form.email.label(class="form-control-label") }}
-                        {{ form.email(class="form-control") }}
+                        {{ form.submit(class="btn btn-outline-info") }}
                     </div>
-                    <!-- image file field -->
-                    <div class="form-group">
-                        {{ form.picture.label() }}
-                        {{ form.picture(class="form-control-file") }}
-                        {% if form.picture.errors %}
-                            {% for error in form.picture.errors %}
-                                <span class="text-danger">{{ error }}</span></br>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                    {{ form.csrf_token }}
+                </form>
+            </div>
 
-                    <p>I am a:</p>
-                    <div>mentor:</div>
-                    <div class="form-check">
-                        {{ form.mentor_fullstack(class="form-check-input") }}
-                        {{ form.mentor_fullstack.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.mentor_backend(class="form-check-input") }}
-                        {{ form.mentor_backend.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.mentor_frontend(class="form-check-input") }}
-                        {{ form.mentor_frontend.label(class="form-check-label") }}
-                    </div>
-                    <br>
-                    <div>mentee:</div>
-                    <div class="form-check">
-                        {{ form.mentee_fullstack(class="form-check-input") }}
-                        {{ form.mentee_fullstack.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.mentee_backend(class="form-check-input") }}
-                        {{ form.mentee_backend.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.mentee_frontend(class="form-check-input") }}
-                        {{ form.mentee_frontend.label(class="form-check-label") }}
-                    </div>
-                    <br>
-                    <div>collaborator:</div>
-                    <div class="form-check">
-                        {{ form.collaborator_fullstack(class="form-check-input") }}
-                        {{ form.collaborator_fullstack.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.collaborator_backend(class="form-check-input") }}
-                        {{ form.collaborator_backend.label(class="form-check-label") }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.collaborator_frontend(class="form-check-input") }}
-                        {{ form.collaborator_frontend.label(class="form-check-label") }}
-                    </div>
-                    
-                </fieldset>
-                <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
-                </div>
-                {{ form.csrf_token }}
-            </form>
         </div>
-
     </div>
 {% endblock content %}

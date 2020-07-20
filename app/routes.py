@@ -1,6 +1,7 @@
 # followed resource for Flask-Dance Google OAuth: https://github.com/singingwolfboy/flask-dance-google-sqla/blob/master/app/oauth.py
 import os
 import secrets
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from app import app, db, bcrypt
 from app.forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm, SearchForm
@@ -48,7 +49,6 @@ def github_logged_in(blueprint, token):
         username = info['login']
         email = info['email']
         avatar_url = info['avatar_url']
-        # try this in match logic?
         query = User.query.filter_by(username=username)
         try:
             user = query.one() # .one() should only be used if getting only one result is mandatory for the rest of the method
@@ -238,10 +238,16 @@ def browse():
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
-    _, f_extension = os.path.splitext(form_picture.filename)
-    picture_filename = random_hex + f_extension
-    picture_path = os.path.join(app.root_path, 'static/profile_pictures', picture_filename)
-    form_picture.save(picture_path)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_filename = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static', 'profile_pictures', picture_filename)
+
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+
+    i.save(picture_path)
+
     return picture_filename
 
 def add_role(role_name, skill_name):
@@ -260,11 +266,12 @@ def profile_settings():
     if form.validate_on_submit():
         if form.picture.data:
             # not showing picture
-            old_pic = current_user.image_file
+            # old_pic = current_user.image
             picture_file = save_picture(form.picture.data)
             current_user.image = picture_file
-            if old_pic != 'default.jpg':
-                os.remove(os.path.join(app.root_path, 'static/profile_pics', old_pic))
+            # delete old pic
+            # if old_pic != 'default.jpg':
+            #     os.remove(os.path.join(app.root_path, 'static', 'profile_pictures', old_pic))
         current_user.username = form.username.data
         current_user.email = form.email.data
         
@@ -303,14 +310,14 @@ def profile_settings():
         form.mentee.data = current_user.roles.filter_by(name='mentee').first()
         form.collaborator.data = current_user.roles.filter_by(name='collaborator').first()
        
-    image_file = url_for('static', filename='profile_pictures/' + 'current_user.image')
+    image_file = url_for('static', filename='profile_pictures/' + current_user.image)
     return render_template('profile_settings.html', image_file=image_file, form=form)
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        image_file = url_for('static', filename='profile_pictures/' + 'user.image')
+        image_file = url_for('static', filename='profile_pictures/' + user.image)
         return render_template('profile.html', image_file=image_file, user=user)
     else:
         flash('User does not exist', 'danger')

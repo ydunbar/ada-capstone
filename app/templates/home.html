@@ -5,19 +5,28 @@
 
 {% block content %}
     <div class="main">
+        <!-- if current_user.is_authenticated -->
         {% if posts %}
-        <!-- and if current_user.is_authenticated -->
-            <h2>Messages</h2>
-            <!-- show posts -->
-            {% for post in posts %}
-                <div class="card w-75">
-                    <div class="card-body">
-                        <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + post.author.image) }}">
-                        <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
-                        <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+            <div class="messages">
+                <h2>Messages</h2>
+                <!-- show posts -->
+                {% for post in posts %}
+                    <div class="card w-75">
+                        <div class="card-body message-card">
+                            <div class="left">
+                                <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + post.author.image) }}">
+                            </div>
+                            <div class="right center">
+                                <div class="centered">
+                                    <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
+                                    <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+                                </div>
+                               
+                            </div>  
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% endif %}
 
         <!-- <h1>Forum</h1> -->

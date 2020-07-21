@@ -13,11 +13,10 @@
             <p>{{ post.content }}</p>
             <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
             <!-- reply to (author) message button -->
-            <a href="{{ url_for('new_post', username = post.author.username) }}">Reply to message</a>
-            <br>
+            <a class="btn btn-primary btn-sm m-1" href="{{ url_for('new_post', username = post.author.username) }}">REPLY</a>
             {% if post.author == current_user %}
-                <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('update_post', id=post.id) }}">Edit</a>
-                <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', id=post.id) }}">Delete</a>
+                <a class="btn btn-info btn-sm m-1" href="{{ url_for('update_post', id=post.id) }}">EDIT</a>
+                <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', id=post.id) }}">DELETE</a>
                 <!-- <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>  -->
             {% endif %}
         </div>

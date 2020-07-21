@@ -51,15 +51,15 @@
                     </div>
                 </fieldset>
                 <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    {{ form.submit(class="btn btn-primary btn-sm") }}
                 </div>
                 {{ form.csrf_token }}
             </form>
         </div>
         <div>
             <span>Sign up with:</span> 
-            <a href="{{ url_for('github.login') }}" class="btn btn-outline-info btn-sm">GitHub</a>
-            <a href="{{ url_for('google.login') }}" class="btn btn-outline-info btn-sm">Google</a>
+            <a href="{{ url_for('github.login') }}" class="btn btn-dark btn-sm">GitHub</a>
+            <a href="{{ url_for('google.login') }}" class="btn btn-secondary btn-sm">Google</a>
             <br>
             <small class="text-muted">
                 Already have an account? <a href="{{ url_for('login') }}">Sign in</a>

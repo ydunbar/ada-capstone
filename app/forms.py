@@ -17,7 +17,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message="email required")])
     password = PasswordField('Password', validators=[DataRequired(message="password required")])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(message="password required"), EqualTo('password', message="passwords must match")])
-    submit = SubmitField('Sign up')
+    submit = SubmitField('SIGN UP')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -33,7 +33,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
-    submit = SubmitField('Log in')
+    submit = SubmitField('LOG IN')
 
 class UpdateProfileForm(FlaskForm):
     # role_choices = role_query()
@@ -56,7 +56,7 @@ class UpdateProfileForm(FlaskForm):
     collaborator_backend = BooleanField('back-end')
     collaborator_frontend = BooleanField('front-end')
     
-    submit = SubmitField('Update')
+    submit = SubmitField('UPDATE')
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -73,9 +73,9 @@ class UpdateProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Subject', validators=[DataRequired()])
     content = TextAreaField('Message', validators=[DataRequired()])
-    submit = SubmitField('Post')
+    submit = SubmitField('POST')
 
 class SearchForm(FlaskForm):
     role = SelectField('role', choices=[('mentor', 'mentor'), ('mentee', 'mentee'), ('collaborator', 'collaborator')])
     skill = SelectField('specialty', choices=[])
-    submit = SubmitField('Search')
+    submit = SubmitField('SEARCH')

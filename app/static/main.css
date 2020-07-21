@@ -1,23 +1,88 @@
+/* Body */
+
 body {
     font-family: 'Roboto', sans-serif;
+    background-color: #F6F8F8;
 }
 
 body a {
-    color: #01ABFF !important;
+    color: #01ABFF;
 }
 
 .main {
-    margin-top: 50px;
+    margin-top: 70px;
 }
+
+h2 {
+    color: #A1B2C2
+}
+
+.btn-primary, .btn-info {
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: #01ABFF !important;;
+}
+
+.btn-info {
+    background-color: #00FF61 !important;
+}
+
+.btn-danger {
+    background-color: #FF0065;
+}
+
+.btn-secondary {
+    background-color: #4885ed
+}
+
+/* Nav */
 
 nav {
     background: white;
 }
 
-nav .navbar-light div #navbarNav ul .navbar-nav li .nav-item a .nav-link {
-    color: #01ABFF;
+nav a {
+    color: #01ABFF !important;
 }
 
 nav .navbar-light div #navbarNav ul .navbar-nav li .nav-item a .nav-link a:hover { 
     color: #00FF61 !important;
+}
+
+nav .btn {
+    margin-left: 15px;
+    width: 80px;
+    color: white;
+}
+
+/* Cards */
+
+.card {
+    margin-bottom: 30px;
+}
+
+.messages {
+    /* center align children; header and cards */
+}
+
+.message-card, .user-card {
+    display: flex;
+}
+
+.left, .right, .middle {
+    flex: 1;
+}
+
+.center {
+    position: relative;
+}
+
+.centered {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }

@@ -13,7 +13,7 @@
                     <div class="form-group">
                         {{ form.role }}
                         {{ form.skill }}
-                        {{ form.submit(class="btn btn-outline-info btn-sm") }}
+                        {{ form.submit(class="btn btn-primary btn-sm") }}
                     </div>       
             </fieldset>
         </form>
@@ -22,11 +22,24 @@
         <!-- <h2>All Users</h2> -->
         <!-- show posts -->
         {% for user in users %}
-            <!-- <img class="rounded-circle" src="{{ image_file }}"> -->
-            <!-- link to user show page -->
-            <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
-            <p><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
-            
+            <div class="card w-75">
+                <div class="card-body user-card">
+                    <div class="left">
+                        <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
+                    </div>
+                    <div class="middle center">
+                        <div class="centered">
+                            <p class="card-text"><a href="{{ url_for('profile', username = user.username) }}">{{ user.username }}</a></p>
+                            <!-- role info -->
+                        </div>
+                    </div> 
+                    <div class="right center">
+                        <div class="centered">
+                            <a class="btn btn-primary btn-sm" href="{{ url_for('new_post', username = user.username) }}">MESSAGE</a>
+                        </div>       
+                    </div>   
+                </div>
+            </div>           
         {% endfor %}
     </div>
 {% endblock content %}

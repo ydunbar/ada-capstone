@@ -6,20 +6,29 @@
 {% block content %}
     <div class="main">
         <div class="content-section">
-            <img class="rounded-circle" src="{{ user.image }}">
-            <h2>{{ user.username }}</h2>
-            {% for role in user.roles %}
-            <p>
-                <span>{{ role.name }}:</span> 
-                {% for skill in role.skills %}
-                    <span>{{ skill.name }}</span>
-                {% endfor %}
-                <!-- add comma after multiple roles? -->
-            </p>
-                
-            {% endfor %}
-            <p class="text-secondary">{{ user.email }}</p>
-            <a href="{{ url_for('new_post', username = user.username) }}">Send message</a>
+        <div class="card w-50 text-center">
+            <div class="card-body profile-card">
+                <div>
+                    <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
+                </div>
+
+                <div>
+                    <h3 class="card-text">{{ user.username }}</h3>
+                    {% for role in user.roles %}
+                        <p>
+                            <span>{{ role.name }}:</span>
+                            {% for skill in role.skills %}
+                                <span>{{ skill.name }}</span>
+                            {% endfor %}
+                            <!-- add comma after multiple roles? -->
+                    {% endfor %}
+                </div> 
+
+                <div class="card-footer bg-transparent">
+                    <a class="btn btn-primary btn-sm" href="{{ url_for('new_post', username = user.username) }}">MESSAGE</a>  
+                </div>  
+                 
+            </div>
         </div>
     </div>
 {% endblock content %}

@@ -24,12 +24,12 @@
                     </div>
                 </fieldset>
                 <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    {{ form.submit(class="btn btn-primary btn-sm") }}
                 </div>
                 {{ form.csrf_token }}
                 <span>Log in with:</span> 
-                <a href="{{ url_for('github.login') }}" class="btn btn-outline-info btn-sm">GitHub</a>
-                <a href="{{ url_for('google.login') }}" class="btn btn-outline-info btn-sm">Google</a>
+                <a href="{{ url_for('github.login') }}" class="btn btn-dark btn-sm">GitHub</a>
+                <a href="{{ url_for('google.login') }}" class="btn btn-secondary btn-sm">Google</a>
                 <br>
                 <small class="text-muted">
                     <!-- update link -->

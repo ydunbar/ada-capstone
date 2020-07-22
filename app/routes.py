@@ -127,17 +127,9 @@ def get_mentors(skill):
             if skill_match:
                 return user
 
-# def unique_match(matches, user):
-#     unique = True
-#     for match in matches:
-#         if match == user:
-#             unique = False
-#     return unique
-
 @app.route('/matches', methods=['GET'])
 @login_required
 def matches():   
-    # TODO: add logic for matches based on complementary roles
     matches = []
     roles = current_user.roles
     for role in roles:
@@ -148,9 +140,6 @@ def matches():
                 # if mentor: full-stack
                 if skill.name == 'full-stack':
                     user = get_mentees('full-stack')
-                    # TODO: check if user is already in matches
-                    # if unique_match(matches, user): # not working,
-                    # might just do a user filter_by().first() on matches
                     matches.append(user)
                 # if mentor: back-end
                 if skill.name == 'back-end':
@@ -170,9 +159,6 @@ def matches():
             for skill in skills:
                 if skill.name == 'full-stack':
                     user = get_mentors('full-stack')
-                    # TODO: check if user is already in matches
-                    # if unique_match(matches, user): # not working,
-                    # might just do a user filter_by().first() on matches
                     matches.append(user)
                 # if mentor: back-end
                 if skill.name == 'back-end':
@@ -210,7 +196,6 @@ def matches():
     matches = list(set(matches))
     return render_template('matches.html', matches=matches)
 
-# with all users and search; should be one route or two (with search template extending browse?)?
 @app.route('/browse', methods=['GET', 'POST'])
 def browse():
     form = SearchForm()
@@ -268,7 +253,6 @@ def profile_settings():
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:
-            # not showing picture
             # old_pic = current_user.image
             picture_file = save_picture(form.picture.data)
             current_user.image = picture_file

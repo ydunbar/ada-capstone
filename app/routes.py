@@ -103,9 +103,11 @@ def home():
     # only if logged in:
     if current_user.is_authenticated:
         posts = Post.query.filter_by(recipient=current_user)
+        user = current_user
     else:
-        posts = []        
-    return render_template('home.html', posts=posts)
+        posts = []
+        user = False     
+    return render_template('home.html', posts=posts, user=user)
 
 def get_mentees(skill):
     all_users = User.query.all()
@@ -193,7 +195,8 @@ def matches():
                     all_users.remove(current_user)
                     # TODO remove front-end
                     matches = all_users
-    matches = list(set(matches))
+    if matches:
+        matches = list(set(matches))
     return render_template('matches.html', matches=matches)
 
 @app.route('/browse', methods=['GET', 'POST'])

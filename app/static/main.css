@@ -63,6 +63,19 @@ nav .btn {
     margin-bottom: 30px;
 }
 
+.small-image {
+    max-width: 75px;
+}
+
+.large-image {
+    max-width: 125px;
+    margin-bottom: 15px;
+}
+
+.profile-btn {
+    margin-top: 10px;
+}
+
 .messages {
     /* center align children; header and cards */
 }

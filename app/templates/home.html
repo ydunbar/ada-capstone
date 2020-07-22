@@ -5,30 +5,57 @@
 
 {% block content %}
     <div class="main">
-        <!-- if current_user.is_authenticated -->
-        {% if posts %}
-            <div class="messages">
-                <h2>Messages</h2>
-                <!-- show posts -->
-                {% for post in posts %}
-                    <div class="card w-75">
-                        <div class="card-body message-card">
-                            <div class="left">
-                                <img class="rounded-circle" src="{{ url_for('static', filename='profile_pictures/' + post.author.image) }}">
-                            </div>
-                            <div class="right center">
-                                <div class="centered">
-                                    <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
-                                    <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
-                                </div>
-                               
-                            </div>  
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+        {% if not user %}
+            <h1>Welcome!</h1>
         {% endif %}
+        {% if user %}
+            <div class="card w-25 text-center">
+                <div class="card-body profile-card">
+                    <div>
+                        <img class="rounded-circle large-image" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
+                    </div>
 
+                    <div>
+                        <h3 class="card-text">{{ user.username }}</h3>
+                        {% for role in user.roles %}
+                            <p>
+                                <span>{{ role.name }}:</span>
+                                {% for skill in role.skills %}
+                                    <span>{{ skill.name }}</span>
+                                {% endfor %}
+                                <!-- add comma after multiple roles? -->
+                        {% endfor %}
+                    </div> 
+
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-primary btn-sm profile-btn" href="{{ url_for('new_post', username = user.username) }}">MESSAGE</a>  
+                    </div>  
+                    
+                </div>
+            </div>
+            {% if posts %}
+                <div class="messages">
+                    <h2>Messages</h2>
+                    <!-- show posts -->
+                    {% for post in posts %}
+                        <div class="card w-75">
+                            <div class="card-body message-card">
+                                <div class="left">
+                                    <img class="rounded-circle small-image" src="{{ url_for('static', filename='profile_pictures/' + post.author.image) }}">
+                                </div>
+                                <div class="right center">
+                                    <div class="centered">
+                                        <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
+                                        <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+                                    </div>
+                                
+                                </div>  
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
         <!-- <h1>Forum</h1> -->
     </div>
 {% endblock content %}

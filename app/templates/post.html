@@ -5,20 +5,24 @@
 
 {% block content %}
     <div class="main"></div>
-        <div>
-            <!-- and if current_user.is_authenticated -->
-            <!-- show post --> 
-            <h3>{{ post.title }}</h3>
-            <!-- separate into message view page; link from title -->
-            <p>{{ post.content }}</p>
-            <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
-            <!-- reply to (author) message button -->
-            <a class="btn btn-primary btn-sm m-1" href="{{ url_for('new_post', username = post.author.username) }}">REPLY</a>
-            {% if post.author == current_user %}
-                <a class="btn btn-info btn-sm m-1" href="{{ url_for('update_post', id=post.id) }}">EDIT</a>
-                <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', id=post.id) }}">DELETE</a>
-                <!-- <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>  -->
-            {% endif %}
+        <div class="card w-100">
+            <div class="card-body profile-card">
+                <div>
+                    <h3 class="card-text">{{ post.title }}</h3>
+                    <p class="card-text">{{ post.content }}</p>
+                    <p>from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
+                  
+                </div> 
+
+                <div class="card-footer bg-transparent">
+                    <a class="btn btn-primary btn-sm m-1" href="{{ url_for('new_post', username = post.author.username) }}">REPLY</a>
+                    {% if post.author == current_user %}
+                        <a class="btn btn-info btn-sm m-1" href="{{ url_for('update_post', id=post.id) }}">EDIT</a>
+                        <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', id=post.id) }}">DELETE</a>
+                        <!-- <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>  -->
+                    {% endif %}
+                </div>  
+            </div>
         </div>
             
         <!-- Modal -->

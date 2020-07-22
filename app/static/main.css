@@ -3,14 +3,19 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #F6F8F8;
+    padding-top: 70px;
 }
 
 body a {
     color: #01ABFF;
 }
 
-.main {
-    margin-top: 70px;
+.flex-container {
+    display: flex;
+}
+
+.flex-children {
+    flex: 1;
 }
 
 h2 {
@@ -78,6 +83,7 @@ nav .btn {
 
 .messages {
     /* center align children; header and cards */
+    padding: 20px;
 }
 
 .message-card, .user-card {

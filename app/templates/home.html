@@ -29,7 +29,6 @@
                         <div>
                             <img class="rounded-circle large-image" src="{{ url_for('static', filename='profile_pictures/' + user.image) }}">
                         </div>
-
                         <div>
                             <h3 class="card-text">{{ user.username }}</h3>
                             {% for role in user.roles %}
@@ -41,11 +40,9 @@
                                     <!-- add comma after multiple roles? -->
                             {% endfor %}
                         </div> 
-
                         <div class="card-footer bg-transparent">
                             <a class="btn btn-primary btn-sm profile-btn" href="{{ url_for('profile', username = user.username) }}">PROFILE</a>  
-                        </div>  
-                        
+                        </div>                         
                     </div>
                 </div>
                 {% if posts %}
@@ -62,8 +59,7 @@
                                         <div class="centered">
                                             <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">subject: {{ post.title }}</a></h5>
                                             <p class="card-text">from <a href="{{ url_for('profile', username = post.author.username) }}">{{ post.author.username }}</a></p>
-                                        </div>
-                                    
+                                        </div>                
                                     </div>  
                                 </div>
                             </div>

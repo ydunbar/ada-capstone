@@ -256,12 +256,12 @@ def profile_settings():
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:
-            # old_pic = current_user.image
+            old_pic = current_user.image
             picture_file = save_picture(form.picture.data)
             current_user.image = picture_file
             # delete old pic
-            # if old_pic != 'default.jpg':
-            #     os.remove(os.path.join(app.root_path, 'static', 'profile_pictures', old_pic))
+            if old_pic != 'default.jpg':
+                os.remove(os.path.join(app.root_path, 'static', 'profile_pictures', old_pic))
         current_user.username = form.username.data
         current_user.email = form.email.data
         

@@ -1,13 +1,23 @@
 /* Body */
 
+/* html {
+    position: relative;
+    min-height: 100vh;
+} */
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #F6F8F8;
-    padding-top: 70px;
+    padding-top: 57px;
 }
 
 body a {
     color: #01ABFF;
+}
+
+.main {
+    position: relative;
+    min-height: 100vh;
 }
 
 .flex-container {
@@ -42,6 +52,10 @@ h2 {
     background-color: #4885ed
 }
 
+.padded-container {
+    padding: 25px
+}
+
 /* Nav */
 
 nav {
@@ -62,6 +76,27 @@ nav .btn {
     color: white;
 }
 
+/* Homepage */
+
+.hero-image {
+    width: 100%;
+    display: inline-block;
+}
+
+.hero-image img {
+    width: 100vw;
+}
+
+.about-container {
+    background-color: white;
+    padding-bottom: 6rem;
+}
+
+.about-header {
+    color: #01ABFF;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 /* Cards */
 
 .card {
@@ -104,4 +139,20 @@ nav .btn {
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+/* Footer */
+
+footer {
+    margin-top: auto;
+    bottom: 0;
+    padding-top: 4rem;
+    padding-bottom: 1rem;
+    width: 100%;
+    background-color: #01ABFF;
+    color: #fff;
+}
+
+.copyright {
+    text-align: center;
 }

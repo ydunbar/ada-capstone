@@ -4,8 +4,7 @@
 {% endblock head %}
 
 {% block content %}
-    <div class="main">
-
+    <div>
         {% if not user %}
             <section id="homepage-hero-image">
                 <div class="hero-image">
@@ -14,15 +13,17 @@
             </section>
             <section id="about">
                 <div class="padded-container about-container">
-                    <h1 class="about-header">Meet Professionals and Budding Developers</h1>
-                    <h3>How it works</h3>
-                    <p>Just sign up, fill your profile, and start networking!</p>
+                    <div class="center-text">
+                        <h1 class="about-header">Meet Professionals and Budding Developers</h1>
+                        <h3>How it works</h3>
+                        <p>Just sign up, fill your profile, and start connecting!</p>
+                    </div>  
                 </div>
             </section>
         {% endif %}
 
         {% if user %}
-            <div class="flex-container">
+            <div class="flex-container padded-container">
                 <div class="card text-center flex-children" style="width: 18rem;">
                     <div class="card-body home-profile-card">
                         <div>

@@ -296,9 +296,32 @@ def profile_settings():
         form.username.data = current_user.username
         form.email.data = current_user.email
         # show checked roles
-        form.mentor.data = current_user.roles.filter_by(name='mentor').first()
-        form.mentee.data = current_user.roles.filter_by(name='mentee').first()
-        form.collaborator.data = current_user.roles.filter_by(name='collaborator').first()
+        mentor = current_user.roles.filter_by(name='mentor').first()
+        if mentor:
+            mentor_fullstack = mentor.skills.filter_by(name='full-stack').first()
+            form.mentor_fullstack.data = mentor_fullstack
+            mentor_backend = mentor.skills.filter_by(name='back-end').first()
+            form.mentor_backend.data = mentor_backend
+            mentor_frontend = mentor.skills.filter_by(name='front-end').first()
+            form.mentor_frontend.data = mentor_frontend
+        
+        mentee = current_user.roles.filter_by(name='mentee').first()
+        if mentee:
+            mentee_fullstack = mentee.skills.filter_by(name='full-stack').first()
+            form.mentee_fullstack.data = mentee_fullstack
+            mentee_backend = mentee.skills.filter_by(name='back-end').first()
+            form.mentee_backend.data = mentee_backend
+            mentee_frontend = mentee.skills.filter_by(name='front-end').first()
+            form.mentee_frontend.data = mentee_frontend
+
+        collaborator = current_user.roles.filter_by(name='collaborator').first()
+        if collaborator:
+            collaborator_fullstack = collaborator.skills.filter_by(name='full-stack').first()
+            form.collaborator_fullstack.data = collaborator_fullstack
+            collaborator_backend = collaborator.skills.filter_by(name='back-end').first()
+            form.collaborator_backend.data = collaborator_backend
+            collaborator_frontend = collaborator.skills.filter_by(name='front-end').first()
+            form.collaborator_frontend.data = collaborator_frontend
        
     image_file = url_for('static', filename='profile_pictures/' + current_user.image)
     return render_template('profile_settings.html', image_file=image_file, form=form)

@@ -51,9 +51,9 @@ def github_logged_in(blueprint, token):
         avatar_url = info['avatar_url']
         query = User.query.filter_by(username=username)
         try:
-            user = query.one() # .one() should only be used if getting only one result is mandatory for the rest of the method
+            user = query.one()
         except NoResultFound:
-            user = User(username=username, email=email, image=avatar_url)
+            user = User(username=username, email=email)
             db.session.add(user)
             db.session.commit()
         login_user(user)
@@ -86,7 +86,7 @@ def google_logged_in(blueprint, token):
         flash('You are logged in as {}'.format(info['name']), 'success')
 
     else:
-        user = User(username=info['name'], email=info['email'], image=info['picture'])
+        user = User(username=info['name'], email=info['email'])
         # Associate the new local user account with the OAuth token
         oauth.user = user
         db.session.add_all([user, oauth])

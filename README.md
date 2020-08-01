@@ -10,5 +10,4 @@ $ db.create_all()
 $ Skill.generate_skills()  
 ### Run app:   
 $ python run.py  
-View in browser:  
-http://localhost:5000/
+View in browser: http://localhost:5000/
